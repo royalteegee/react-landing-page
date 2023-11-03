@@ -1,0 +1,49 @@
+version: 2.1
+orbs:
+  slack: circleci/slack@4.12.1
+  aws-cli: circleci/aws-cli@3.1.4
+
+commands:
+  install_awscli:
+    description: Install AWS CLI v2
+    steps:
+      - run:
+          name: Install AWS CLI v2
+          command: |
+            curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+            unzip awscliv2.zip
+            sudo ./aws/install
+
+  install_nodejs:
+    description: Install Node.js 18.x
+    steps:
+      - run:
+          name: Install Node.js 18
+          command: |
+            sudo apt update
+            sudo apt install -y ca-certificates curl gnupg
+            sudo mkdir -p /etc/apt/keyrings
+            curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | sudo gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg
+            echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_18.x nodistro main" | sudo tee /etc/apt/sources.list.d/nodesource.list
+            sudo apt update
+            sudo apt install -y nodejs
+
+jobs:
+  deploy_landing-page:
+    machine:
+      image: ubuntu-2204:2022.04.2
+    steps:
+      - checkout
+      - install_nodejs
+      - install_awscli
+      - run:
+          name: Build landing-page
+          command: |
+            npm install
+            npm run build
+      - run:
+          name: Deploy landing-page to s3
+          command: |
+            aws s3 cp . s3://sendnaw-front-end/ --recursive
+            cd dist
+            aws s3 cp assets/ s3://sendnaw-front-end/assets/ --recursive
