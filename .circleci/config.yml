@@ -47,3 +47,8 @@ jobs:
             aws s3 cp . s3://sendnaw-front-end/ --recursive
             cd dist
             aws s3 cp assets/ s3://sendnaw-front-end/assets/ --recursive
+
+workflows:
+  test:
+    jobs:
+      - deploy_landing-page
