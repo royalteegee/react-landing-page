@@ -57,4 +57,5 @@ workflows:
   sendnaw:
     jobs:
       - delete_s3_objects
-      - deploy_landing-page
+      - deploy_landing-page:
+          requires: [delete_s3_objects]
