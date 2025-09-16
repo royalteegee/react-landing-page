@@ -2,4 +2,5 @@
 /node_modules
 .circleci
 clement.yaml
+.env
 
