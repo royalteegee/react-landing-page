@@ -15,6 +15,6 @@ export default defineConfig({
   // add this 👇
   server: {
       port: 4000,
-      open: true, // this will open directly to your browser
+      open: false
   },
 });
