@@ -14,7 +14,14 @@ export default defineConfig({
   },
   // add this 👇
   server: {
+      host: true,
       port: 4000,
-      open: false
+      open: false,
+      allowedHosts: true,
+  },
+  preview: {
+      host: true,
+      port: 4000,
+      allowedHosts: true,
   },
 });
